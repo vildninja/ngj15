@@ -150,19 +150,19 @@ public class PlayerController : MonoBehaviour
             slippers.right.localEulerAngles = Vector3.zero;
         }
     }
-
+     
     void OnCollisionEnter(Collision col)
     {
         var other = col.gameObject.GetComponent<PlayerController>();
         if (other)
         {
-            Debug.Log("Impact " + playerPostFix);
+//            Debug.Log("Impact " + playerPostFix);
 
             var impact = Vector3.Project(col.relativeVelocity, col.contacts[0].normal);
             impact *= other.Push/Push;
             rigidbody.AddForce(impact, ForceMode.VelocityChange);
-
-            Debug.DrawRay(transform.position, impact, Color.red);
+            Services.Get<CameraShake>().ApplyShake(0.2f, 0.2f);
+            //Debug.DrawRay(transform.position, impact, Color.red);
         }
     }
 

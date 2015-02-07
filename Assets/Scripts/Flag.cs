@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using GameCore;
 
 public class Flag : MonoBehaviour
 {
@@ -56,12 +57,15 @@ public class Flag : MonoBehaviour
     {
         if (lastCaptureTime > Time.time - 1 || owner == player)
             return;
-        StopCoroutine(Capturing());
+        StopAllCoroutines();
+
 
         lastCaptureTime = Time.time;
         owner = player;
         transform.position = owner.transform.position;
         transform.rotation = owner.transform.rotation;
+        GameManager.Instance.GivePlayerScore(owner, 1);
+        Services.Get<CameraShake>().ApplyShake(0.2f, 0.2f);
         StartCoroutine(Capturing());
     }
 }

@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
 
     public int ScoreLimit = 20;
 
+    public InAudioNode Point;
     public float startSpeed = 10;
         
     public Color PlayerColor(int player)
@@ -90,15 +91,25 @@ public class GameManager : MonoBehaviour
 
     public void GivePlayerScore(PlayerController controller, int score)
     {
+        if (controller == null)
+        {
+            Debug.LogError("Dont try and give null controllers a score");
+        }
         var item = Score.Find(s => s.Item1 == controller);
         if (item == null)
         {
             item = Score.Add(controller, score);
+            InAudio.Play(gameObject, Point);
         }
         else
         {
-            item.Item2 += score; 
+            if (item.Item2 < ScoreLimit)
+                InAudio.Play(gameObject, Point);
+            item.Item2 += score;
         }
+
+
+
         if (item.Item2 > ScoreLimit && Winner == null)
         {
             Winner = controller;
@@ -169,6 +180,7 @@ public class GameManager : MonoBehaviour
     {
         int number = Int32.Parse(controller.playerPostFix);
         Spawn(number, GetSpawnPoint(number).transform);
+        Services.Get<CameraShake>().ApplyShake(0.6f, 0.6f);
 
     }
 }
