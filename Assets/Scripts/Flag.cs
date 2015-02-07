@@ -28,27 +28,20 @@ public class Flag : MonoBehaviour
         }
     }
 
-    //void FixedUpdate()
-    //{
-    //    Vector3 destination = startPos;
-    //    if (owner)
-    //        destination = owner.transform.position;
+    void LateUpdate()
+    {
+        if (owner)
+        {
 
-    //    var lastPos = transform.position;
-    //    var newPos = Vector3.Lerp(lastPos, destination, 0.5f);
-
-    //    velocity = Vector3.Lerp(velocity, (newPos - lastPos) * Time.fixedDeltaTime, 0.1f);
-    //    transform.position = newPos;
-
-    //    if (owner)
-    //        transform.forward = owner.transform.forward;
-    //}
+            transform.position = owner.transform.position;
+            transform.rotation = owner.transform.rotation;
+        }
+    }
 
     public void Capture(PlayerController player)
     {
         owner = player;
-        transform.parent = owner.transform;
-        transform.localPosition = Vector3.zero;
-        transform.localEulerAngles = Vector3.zero;
+        transform.position = owner.transform.position;
+        transform.rotation = owner.transform.rotation;
     }
 }
