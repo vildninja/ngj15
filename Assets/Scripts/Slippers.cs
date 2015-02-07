@@ -13,4 +13,10 @@ public class Slippers : MonoBehaviour {
     public float animSpeed = 1;
 
     public Transform left, right;
+
+    void Update()
+    {
+        if (transform.childCount > 0)
+            transform.Rotate(0, 90 * Time.deltaTime, 0);
+    }
 }

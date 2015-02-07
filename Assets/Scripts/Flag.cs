@@ -46,6 +46,10 @@ public class Flag : MonoBehaviour
             transform.position = owner.transform.position;
             transform.rotation = owner.transform.rotation;
         }
+        else
+        {
+            transform.Rotate(0, Time.deltaTime * 90, 0);
+        }
     }
 
     public void Capture(PlayerController player)

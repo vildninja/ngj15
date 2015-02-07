@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     public List<PlayerController> Players;
 
     public int ScoreLimit = 20;
+
+    public float startSpeed = 10;
         
     public Color PlayerColor(int player)
     {
@@ -159,6 +161,8 @@ public class GameManager : MonoBehaviour
         var controller = go.GetComponent<PlayerController>();
         Players.Add(controller);
         controller.playerPostFix = player.ToString();
+        controller.color = PlayerColor(player);
+        go.rigidbody.velocity = spawn.forward*startSpeed;
     }
 
     public void Respawn(PlayerController controller)

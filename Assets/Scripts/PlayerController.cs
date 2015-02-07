@@ -35,6 +35,9 @@ public class PlayerController : MonoBehaviour
 
     private Animator anim;
 
+    [HideInInspector]
+    public Color color;
+
     public Transform left, right;
 	public int Id { get; private set; }
 	// Use this for initialization
@@ -44,7 +47,9 @@ public class PlayerController : MonoBehaviour
 	    ups = new List<Vector3>();
 	    lastForward = transform.forward;
 	    Id = Int32.Parse(playerPostFix);
-    }
+
+	    renderer.material.color = color;
+	}
 
     void Update()
     {
