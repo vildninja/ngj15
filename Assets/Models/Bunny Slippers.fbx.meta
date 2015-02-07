@@ -1,16 +1,14 @@
 fileFormatVersion: 2
-guid: bc4432887e841814dad2c5755165bec1
+guid: 3e019005f2f038247bedbdae14df92bd
 ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
     100000: //RootNode
     100002: Camera
     100004: Cube
-    100006: Sun
     400000: //RootNode
     400002: Camera
     400004: Cube
-    400006: Sun
     2300000: Cube
     3300000: Cube
     4300000: Cube
