@@ -26,10 +26,8 @@ public class GameManager : MonoBehaviour
     public Color PlayerColor(int player)
     {
         player -= 1;
-        Debug.Log(player + "  "+PlayerColors.Count);
         if (player < PlayerColors.Count && player >= 0)
         {
-            Debug.Log(PlayerColors[player]);
             return PlayerColors[player];
         }
         return Color.white;
