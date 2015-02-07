@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
     private Color WinnerColor;
 
 	// Use this for initialization
-	void Start ()
+	void Awake ()
 	{
 	    if (Instance == null)
 	    {
@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetButtonDown("Start"))
         {
-            if (Application.loadedLevel == 0)
+            if (Application.loadedLevel == 1)
             {
                 readyPlayers = Object.FindObjectsOfType<PlayerReady>();
                 if (readyPlayers.Count(r => r.Active) > 0)
@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
                 ActivePlayers.Add(readyPlayers[i].PlayerID);
             }
         }
-        Application.LoadLevel(1);
+        Application.LoadLevel(2);
         
     }
 
@@ -140,7 +140,7 @@ public class GameManager : MonoBehaviour
     {
         InAudio.PostEvent(gameObject, Winning);
         yield return new WaitForSeconds(4);
-        Application.LoadLevel(0);
+        Application.LoadLevel(Application.loadedLevel);
     }
         
     public TupleList<PlayerController, int> Score = new TupleList<PlayerController, int>();
