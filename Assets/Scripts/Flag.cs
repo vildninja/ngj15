@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Flag : MonoBehaviour
 {
-
     public PlayerController owner;
 
     private Vector3 velocity;
@@ -21,9 +20,9 @@ public class Flag : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(1);
-            if (owner)
+            if (owner != null)
             {
-                // TODO add score to owner
+                owner.Score += 1;
             }
             else
             {

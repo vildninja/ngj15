@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
 
     public bool isGrounded;
 
+    public int Score;
+
     private List<Vector3> ups;
     private Vector3 surfaceUp;
     private Vector3 lastForward;
