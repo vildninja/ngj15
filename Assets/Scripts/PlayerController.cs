@@ -5,8 +5,6 @@ using System.Collections.Generic;
 public class PlayerController : MonoBehaviour
 {
     public string playerPostFix;
-    public KeyCode jumpButton;
-    public KeyCode otherButton;
     public float force;
     public float jumpForce;
 
@@ -25,7 +23,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (isGrounded && Input.GetKeyDown(jumpButton))
+        if (isGrounded && Input.GetButtonDown("A_"+playerPostFix))
         {
             rigidbody.AddForce(surfaceUp * jumpForce, ForceMode.Impulse);
         }
