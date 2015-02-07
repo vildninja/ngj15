@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public Color color;
 
+    public Renderer playerColor;
+
     public Transform left, right;
 	public int Id { get; private set; }
 	// Use this for initialization
@@ -48,7 +50,7 @@ public class PlayerController : MonoBehaviour
 	    lastForward = transform.forward;
 	    Id = Int32.Parse(playerPostFix);
 
-	    renderer.material.color = color;
+	    playerColor.material.color = color;
 	}
 
     void Update()
@@ -144,10 +146,12 @@ public class PlayerController : MonoBehaviour
 
             slippers.left.SetParent(left, true);
             slippers.left.localPosition = Vector3.zero;
+            slippers.left.localScale = Vector3.one;
             slippers.left.localEulerAngles = Vector3.zero;
             slippers.right.SetParent(right, true);
             slippers.right.localPosition = Vector3.zero;
-            slippers.right.localEulerAngles = Vector3.zero;
+            slippers.right.localScale = Vector3.one;
+            slippers.right.localEulerAngles = new Vector3(0, 180, 180);
         }
     }
      

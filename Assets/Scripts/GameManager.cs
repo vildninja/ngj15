@@ -7,6 +7,7 @@ using GameCore;
 using GameCore.Util;
 using UtilExtensions;
 using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +23,10 @@ public class GameManager : MonoBehaviour
 
     public InAudioNode Point;
     public float startSpeed = 10;
+
+    public List<SpawnPoint> itemSpawns;
+
+    public List<Transform> spawnItems; 
         
     public Color PlayerColor(int player)
     {
@@ -122,6 +127,34 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private int loadedCount = 0;
+    IEnumerator ItemSpawner()
+    {
+        int spawningForScene = loadedCount;
+
+        itemSpawns = FindObjectsOfType<SpawnPoint>().Where(sp => sp.PlayerNoSpawn == 0).ToList();
+        List<Transform> spawned = new List<Transform>();
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(3, 6));
+            if (spawningForScene != loadedCount)
+                yield break;
+
+            if (spawned.Count(s => s.gameObject && s.collider.enabled) < 2)
+            {
+                int nextSpawn = Mathf.FloorToInt(Mathf.Sqrt(Random.Range(0, spawnItems.Count * spawnItems.Count)));
+                var item = spawnItems[nextSpawn];
+                spawnItems.RemoveAt(nextSpawn);
+                spawnItems.Add(item);
+                var s = Instantiate(item) as Transform;
+                spawned.Add(s);
+
+
+            }
+            spawned.RemoveAll(s => !s.gameObject);
+        }
+    }
+
     IEnumerator PlayWin()
     {
         yield return new WaitForSeconds(4);
@@ -132,6 +165,7 @@ public class GameManager : MonoBehaviour
 
     void OnLevelWasLoaded(int level)
     {
+        loadedCount++;
         if (level == 1)
         {
             Score.Clear();

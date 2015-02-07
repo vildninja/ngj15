@@ -14,6 +14,18 @@ public class Slippers : MonoBehaviour {
 
     public Transform left, right;
 
+    public Transform slipperModel;
+
+    void Start()
+    {
+        var t = Instantiate(slipperModel, Vector3.zero, Quaternion.identity) as Transform;
+        t.localScale = Vector3.one;
+        t.SetParent(left, false);
+        t = Instantiate(slipperModel, Vector3.zero, Quaternion.identity) as Transform;
+        t.localScale = Vector3.one;
+        t.SetParent(right, false);
+    }
+
     void Update()
     {
         if (transform.childCount > 0)
