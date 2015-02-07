@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
                 ActivePlayers.Add(readyPlayers[i].PlayerID);
             }
         }
-        Application.LoadLevel("scene");
+        Application.LoadLevel(1);
         
     }
 
@@ -156,21 +156,27 @@ public class GameManager : MonoBehaviour
             Players.Clear();
             WinnerFound = false;
 
-            if (readyPlayers != null)
+            StartCoroutine(SpawnPlayers());
+        }
+    }
+
+    private IEnumerator SpawnPlayers()
+    {
+        yield return new WaitForSeconds(1.6f);
+        if (readyPlayers != null)
+        {
+            for (int i = 0; i < readyPlayers.Length; i++)
             {
-                for (int i = 0; i < readyPlayers.Length; i++)
-                {
-                    if(!readyPlayers[i].Active)
-                        continue;
-                    var spawn = GetSpawnPoint(readyPlayers[i].PlayerID);
-                    Spawn(readyPlayers[i].PlayerID, spawn.transform);
-                }
+                if (!readyPlayers[i].Active)
+                    continue;
+                var spawn = GetSpawnPoint(readyPlayers[i].PlayerID);
+                Spawn(readyPlayers[i].PlayerID, spawn.transform);
+            }
 
 
-                foreach (var playerController in Players)
-                {
-                    Score.Add(playerController, 0);
-                } 
+            foreach (var playerController in Players)
+            {
+                Score.Add(playerController, 0);
             }
         }
     }
