@@ -21,18 +21,19 @@ public class GameManager : MonoBehaviour
 	        Object.Destroy(gameObject);
 	}
 
+    private PlayerReady[] readyPlayers;
     void Update()
     {
         if (Input.GetButtonDown("Start") && Application.loadedLevel == 0)
         {
-            var readys = Object.FindObjectsOfType<PlayerReady>();
-            if (readys.Count(r => r.Active) > 0)
+            readyPlayers = Object.FindObjectsOfType<PlayerReady>();
+            if (readyPlayers.Count(r => r.Active) > 0)
             {
-                for (int i = 0; i < readys.Length; i++)
+                for (int i = 0; i < readyPlayers.Length; i++)
                 {
-                    if (readys[i].Active)
+                    if (readyPlayers[i].Active)
                     {
-                        ActivePlayers.Add(readys[i].PlayerID);
+                        ActivePlayers.Add(readyPlayers[i].PlayerID);
                     }
                 }
                 Application.LoadLevel("scene");
@@ -45,8 +46,14 @@ public class GameManager : MonoBehaviour
         if (level == 1)
         {
             SpawnPoint[] spawnPoints = Object.FindObjectsOfType<SpawnPoint>();
+
+
             Debug.Log("span manager");
         }
     }
-}
 
+    void Spawn(int player)
+    {
+        
+    }
+}

@@ -4,8 +4,7 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
-
-    public string playerPrefix;
+    public string playerPostFix;
     public KeyCode jumpButton;
     public KeyCode otherButton;
     public float force;
@@ -52,7 +51,7 @@ public class PlayerController : MonoBehaviour
             ups.Clear();
         }
 
-        Vector3 direction = new Vector3(Input.GetAxis(playerPrefix + "Horizontal"), 0, Input.GetAxis(playerPrefix + "Vertical"));
+        Vector3 direction = new Vector3(Input.GetAxis("L_XAxis_" + playerPostFix), 0, -Input.GetAxis("L_YAxis_" + playerPostFix));
 
 	    Vector3 forward = direction.normalized;
 	    if (direction.sqrMagnitude < 0.2f)
