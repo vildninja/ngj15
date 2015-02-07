@@ -63,10 +63,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (isGrounded && Input.GetButtonDown("A_"+playerPostFix))
+        if (GameInput.AllowInput)
         {
-            isGrounded = false;
-            rigidbody.AddForce(surfaceUp * Jump, ForceMode.Impulse);
+            if (isGrounded && Input.GetButtonDown("A_" + playerPostFix))
+            {
+                isGrounded = false;
+                rigidbody.AddForce(surfaceUp*Jump, ForceMode.Impulse);
+            }
         }
     }
 
@@ -89,7 +92,9 @@ public class PlayerController : MonoBehaviour
         }
 
         // input
-        Vector3 direction = new Vector3(Input.GetAxis("L_XAxis_" + playerPostFix), 0, -Input.GetAxis("L_YAxis_" + playerPostFix));
+	    Vector3 direction = Vector3.zero;
+        if (GameInput.AllowInput)
+            direction = new Vector3(Input.GetAxis("L_XAxis_" + playerPostFix), 0, -Input.GetAxis("L_YAxis_" + playerPostFix));
 
         // rotate model to look forward
 	    Vector3 forward = direction.normalized;
@@ -124,7 +129,7 @@ public class PlayerController : MonoBehaviour
         // gravity
         rigidbody.AddForce(Vector3.down * Gravity, ForceMode.Acceleration);
 
-        Debug.DrawRay(transform.position, rigidbody.velocity, Color.green);
+        //Debug.DrawRay(transform.position, rigidbody.velocity, Color.green);
 	}
 
     void OnTriggerEnter(Collider col)

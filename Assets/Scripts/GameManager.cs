@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
 
     public int ScoreLimit = 20;
 
+    public InAudioEvent Winning;
     public InAudioNode Point;
     public float startSpeed = 10;
 
@@ -47,7 +48,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public PlayerController Winner = null;
+    private bool WinnerFound;
+    private Color WinnerColor;
 
 	// Use this for initialization
 	void Start ()
@@ -63,7 +65,7 @@ public class GameManager : MonoBehaviour
 
     private PlayerReady[] readyPlayers;
     private SpawnPoint[] SpawnPoints;
-    void Update()
+    void Update() 
     {
         if (Input.GetButtonDown("Start"))
         {
@@ -71,16 +73,8 @@ public class GameManager : MonoBehaviour
             {
                 readyPlayers = Object.FindObjectsOfType<PlayerReady>();
                 if (readyPlayers.Count(r => r.Active) > 0)
-                {
-                    for (int i = 0; i < readyPlayers.Length; i++)
-                    {
-                        if (readyPlayers[i].Active)
-                        {
-                            ActivePlayers.Add(readyPlayers[i].PlayerID);
-                        }
-                    }
-                    Application.LoadLevel("scene");
-                }
+                    StartCoroutine(StartGame());
+
             }
             else
             {
@@ -88,6 +82,23 @@ public class GameManager : MonoBehaviour
                 Spawn(count, Object.FindObjectsOfType<SpawnPoint>().Find(s => s.PlayerNoSpawn == count).transform);
             }
         }
+    }
+
+    IEnumerator StartGame()
+    {
+        Services.Get<MenuMain>().StartGame();
+        yield return new WaitForSeconds(1.8f);
+        readyPlayers = Object.FindObjectsOfType<PlayerReady>();
+        
+        for (int i = 0; i < readyPlayers.Length; i++)
+        {
+            if (readyPlayers[i].Active)
+            {
+                ActivePlayers.Add(readyPlayers[i].PlayerID);
+            }
+        }
+        Application.LoadLevel("scene");
+        
     }
 
     public void GivePlayerScore(PlayerController controller, int score)
@@ -109,11 +120,10 @@ public class GameManager : MonoBehaviour
             item.Item2 += score;
         }
 
-
-
-        if (item.Item2 > ScoreLimit && Winner == null)
+        if (item.Item2 > ScoreLimit && !WinnerFound)
         {
-            Winner = controller;
+            WinnerFound = true;
+            //WinnerColor = PlayerColor(controller.Id);
             var hook = Services.Get<WinnerHook>().gameObject;
             hook.SetActive(true);
             for (int i = 0; i < hook.transform.childCount; i++)
@@ -128,6 +138,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator PlayWin()
     {
+        InAudio.PostEvent(gameObject, Winning);
         yield return new WaitForSeconds(4);
         Application.LoadLevel(0);
     }
@@ -138,9 +149,12 @@ public class GameManager : MonoBehaviour
     {
         if (level == 1)
         {
+            GameInput.AllowInput = false;
+            StartCoroutine(PlayStartAnim());
+
             Score.Clear();
             Players.Clear();
-            Winner = null;
+            WinnerFound = false;
 
             if (readyPlayers != null)
             {
@@ -156,9 +170,18 @@ public class GameManager : MonoBehaviour
                 foreach (var playerController in Players)
                 {
                     Score.Add(playerController, 0);
-                }
+                } 
             }
         }
+    }
+
+    private IEnumerator PlayStartAnim()
+    {
+        for (int i = 3 - 1; i >= 0; i--)
+        {
+            yield return new WaitForSeconds(0.6f);
+        }
+        GameInput.AllowInput = true;
     }
 
     private SpawnPoint GetSpawnPoint(int playerId)
