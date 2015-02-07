@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3bdbc6916aa57734baa2e02f060b460d
+guid: ccbf853edae314644b80715378f7fc00
 ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
@@ -7,7 +7,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: pCube1
+    4300000: pPlane1
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -28,7 +28,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: .00999999978
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
