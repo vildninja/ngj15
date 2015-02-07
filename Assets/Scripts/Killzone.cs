@@ -7,6 +7,7 @@ public class Killzone : MonoBehaviour {
         var player = other.GetComponent<PlayerController>();
         if (player != null)
         {
+            Object.Destroy(other.gameObject);
             GameManager.Instance.Respawn(player);
         }
     }
