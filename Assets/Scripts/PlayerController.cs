@@ -66,8 +66,20 @@ public class PlayerController : MonoBehaviour
         rigidbody.AddForce(direction * force * (isGrounded ? 1 : 0.3f));
 	}
 
+    void OnTriggerEnter(Collider col)
+    {
+        var flag = col.GetComponent<Flag>();
+        if (flag)
+        {
+            flag.Capture(this);
+        }
+    }
+
     void OnCollisionStay(Collision col)
     {
+        if (col.rigidbody)
+            return;
+
         foreach (var c in col.contacts)
         {
             ups.Add(c.normal);
