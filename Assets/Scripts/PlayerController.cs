@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
 
     public Slippers slippers;
 
+    public InAudioNode jumpSound;
+
     public float Force { get { return force * (slippers ? slippers.forceMultiplier : 1); } }
     public float Jump { get { return jump * (slippers ? slippers.jumpMultiplier : 1); } }
     public float Push { get { return push * (slippers ? slippers.pushMultiplier : 1); } }
@@ -68,6 +70,7 @@ public class PlayerController : MonoBehaviour
             if (isGrounded && Input.GetButtonDown("A_" + playerPostFix))
             {
                 isGrounded = false;
+                InAudio.Play(gameObject, jumpSound);
                 rigidbody.AddForce(surfaceUp*Jump, ForceMode.Impulse);
             }
         }
