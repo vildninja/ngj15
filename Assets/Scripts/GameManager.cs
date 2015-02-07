@@ -82,6 +82,11 @@ public class GameManager : MonoBehaviour
                 Spawn(count, Object.FindObjectsOfType<SpawnPoint>().Find(s => s.PlayerNoSpawn == count).transform);
             }
         }
+        if (Input.GetButtonDown("Back_All") && Application.loadedLevel == 2)
+        {
+            StopAllCoroutines();
+            Application.LoadLevel(1);
+        }
     }
 
     IEnumerator StartGame()
@@ -169,8 +174,11 @@ public class GameManager : MonoBehaviour
             {
                 if (!readyPlayers[i].Active)
                     continue;
-                var spawn = GetSpawnPoint(readyPlayers[i].PlayerID);
-                Spawn(readyPlayers[i].PlayerID, spawn.transform);
+
+                int playerId = readyPlayers[i].PlayerID;
+                var spawn = GetSpawnPoint(playerId);
+                if(spawn != null)
+                    Spawn(playerId, spawn.transform);
             }
 
 
