@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.AccessControl;
 
 public class PlayerController : MonoBehaviour
 {
 
     public string playerPrefix;
+    public KeyCode jumpButton;
+    public KeyCode otherButton;
     public float force;
     public float jumpForce;
 
@@ -25,7 +26,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (isGrounded && Input.GetButtonDown(playerPrefix + "Jump"))
+        if (isGrounded && Input.GetKeyDown(jumpButton))
         {
             rigidbody.AddForce(surfaceUp * jumpForce, ForceMode.Impulse);
         }
@@ -63,7 +64,7 @@ public class PlayerController : MonoBehaviour
         transform.LookAt(transform.position + forward, surfaceUp);
 
 
-        rigidbody.AddForce(direction * force);
+        rigidbody.AddForce(direction * force * (isGrounded ? 1 : 0.3f));
 	}
 
     void OnCollisionStay(Collision col)
