@@ -1,9 +1,9 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UtilExtensions;
+using Object = UnityEngine.Object;
 
 public class GameManager : MonoBehaviour
 {
@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
 	}
 
     private PlayerReady[] readyPlayers;
+    private SpawnPoint[] SpawnPoints;
     void Update()
     {
         if (Input.GetButtonDown("Start"))
@@ -57,21 +58,24 @@ public class GameManager : MonoBehaviour
     {
         if (level == 1)
         {
-            SpawnPoint[] spawnPoints = Object.FindObjectsOfType<SpawnPoint>();
             if (readyPlayers != null)
             {
                 for (int i = 0; i < readyPlayers.Length; i++)
                 {
                     if(!readyPlayers[i].Active)
                         continue;
-                    int count = i;
-                    var spawn = spawnPoints.Find(s => s.PlayerNoSpawn == readyPlayers[count].PlayerID);
+                    var spawn = GetSpawnPoint(readyPlayers[i].PlayerID);
                     Spawn(readyPlayers[i].PlayerID, spawn.transform);
                 }
             }
-
-            Debug.Log("span manager");
         }
+    }
+
+    private SpawnPoint GetSpawnPoint(int playerId)
+    {
+        if(SpawnPoints == null)
+            SpawnPoints = Object.FindObjectsOfType<SpawnPoint>();
+        return SpawnPoints.Find(s => s.PlayerNoSpawn == playerId);
     }
 
     void Spawn(int player, Transform spawn)
@@ -80,5 +84,12 @@ public class GameManager : MonoBehaviour
         var controller = go.GetComponent<PlayerController>();
         Players.Add(controller);
         controller.playerPostFix = player.ToString();
+    }
+
+    public void Respawn(PlayerController controller)
+    {
+        int number = Int32.Parse(controller.playerPostFix);
+        Spawn(number, GetSpawnPoint(number).transform);
+
     }
 }
