@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using GameCore;
+using GameCore.Util;
 using UtilExtensions;
 using Object = UnityEngine.Object;
 
@@ -11,7 +14,36 @@ public class GameManager : MonoBehaviour
     public List<int> ActivePlayers;
     public GameObject PlayerPrefab;
 
+    [SerializeField] private List<Color> PlayerColors;
+
     public List<PlayerController> Players;
+
+    public int ScoreLimit = 20;
+        
+    public Color PlayerColor(int player)
+    {
+        player -= 1;
+        Debug.Log(player + "  "+PlayerColors.Count);
+        if (player < PlayerColors.Count && player >= 0)
+        {
+            Debug.Log(PlayerColors[player]);
+            return PlayerColors[player];
+        }
+        return Color.white;
+    }
+
+    public int WinningPlayerId()
+    {
+        var p = Score.FindMax(s => s.Item2);
+        if(p != null)
+            return p.Item1.Id;
+        else
+        {
+            return -1;
+        }
+    }
+
+    public PlayerController Winner = null;
 
 	// Use this for initialization
 	void Start ()
@@ -54,10 +86,47 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void GivePlayerScore(PlayerController controller, int score)
+    {
+        var item = Score.Find(s => s.Item1 == controller);
+        if (item == null)
+        {
+            item = Score.Add(controller, score);
+        }
+        else
+        {
+            item.Item2 += score; 
+        }
+        if (item.Item2 > ScoreLimit && Winner == null)
+        {
+            Winner = controller;
+            var hook = Services.Get<WinnerHook>().gameObject;
+            hook.SetActive(true);
+            for (int i = 0; i < hook.transform.childCount; i++)
+            {
+                hook.transform.GetChild(i).gameObject.SetActive(true);
+            }
+            hook.GetComponentInParent<Animator>().enabled = true;
+            StartCoroutine(PlayWin());
+        }
+    }
+
+    IEnumerator PlayWin()
+    {
+        yield return new WaitForSeconds(4);
+        Application.LoadLevel(0);
+    }
+        
+    public TupleList<PlayerController, int> Score = new TupleList<PlayerController, int>();
+
     void OnLevelWasLoaded(int level)
     {
         if (level == 1)
         {
+            Score.Clear();
+            Players.Clear();
+            Winner = null;
+
             if (readyPlayers != null)
             {
                 for (int i = 0; i < readyPlayers.Length; i++)
@@ -66,6 +135,12 @@ public class GameManager : MonoBehaviour
                         continue;
                     var spawn = GetSpawnPoint(readyPlayers[i].PlayerID);
                     Spawn(readyPlayers[i].PlayerID, spawn.transform);
+                }
+
+
+                foreach (var playerController in Players)
+                {
+                    Score.Add(playerController, 0);
                 }
             }
         }

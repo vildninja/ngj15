@@ -6,28 +6,35 @@ public class Flag : MonoBehaviour
     public PlayerController owner;
 
     private Vector3 velocity;
-    private Transform flagPole;
     private Vector3 startPos;
 
     public float lastCaptureTime;
 
-    IEnumerator Start()
+    public float WaitTime = 2.5f;
+    public int Score = 3;
+    public int TotalScoreMax = 6;
+    private int ExtraScore;
+
+    void Start()
     {
-        flagPole = transform.GetChild(0);
         startPos = transform.position;
         lastCaptureTime = 0;
+    }
 
+    IEnumerator Capturing()
+    {
         while (true)
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(WaitTime);
             if (owner != null)
             {
-                owner.Score += 1;
+                GameManager.Instance.GivePlayerScore(owner,  Mathf.Min(Score + ExtraScore, TotalScoreMax));
             }
             else
             {
                 transform.position = startPos;
             }
+            ExtraScore += 1;
         }
     }
 
@@ -45,10 +52,12 @@ public class Flag : MonoBehaviour
     {
         if (lastCaptureTime > Time.time - 1 || owner == player)
             return;
+        StopCoroutine(Capturing());
 
         lastCaptureTime = Time.time;
         owner = player;
         transform.position = owner.transform.position;
         transform.rotation = owner.transform.rotation;
+        StartCoroutine(Capturing());
     }
 }

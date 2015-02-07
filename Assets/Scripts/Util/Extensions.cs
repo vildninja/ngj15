@@ -193,6 +193,40 @@ namespace UtilExtensions
             return default(T);
         }
 
+        public static T FindMax<T>(this IList<T> list, Func<T, int> func)
+        {
+            if (list == null || func == null)
+                return default(T);
+            int maxScore = 0;
+            T maxElem = default(T);
+            for (int i = 0; i < list.Count; i++)
+            {
+                int score = func(list[i]);
+                if (score > maxScore)
+                {
+                    maxElem = list[i];
+                }
+            }
+            return maxElem;
+        }
+
+        public static int FindMaxIndex<T>(this IList<T> list, Func<T, int> func)
+        {
+            if (list == null || func == null)
+                return -1;
+            int maxScore = int.MinValue;
+            int index = -1;
+            for (int i = 0; i < list.Count; i++)
+            {
+                int score = func(list[i]);
+                if (score > maxScore)
+                {
+                    index = i;
+                }
+            }
+            return index;
+        }
+
         public static T FindFirstNonNull<T>(this IList<T> list) where T : class 
         {
             if (list == null)

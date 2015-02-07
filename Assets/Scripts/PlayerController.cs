@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using GameCore;
 using System.Linq;
 
 public class PlayerController : MonoBehaviour
@@ -28,8 +29,6 @@ public class PlayerController : MonoBehaviour
 
     public bool isGrounded;
 
-    public int Score;
-
     private List<Vector3> ups;
     private Vector3 surfaceUp;
     private Vector3 lastForward;
@@ -37,13 +36,14 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
 
     public Transform left, right;
-
+	public int Id { get; private set; }
 	// Use this for initialization
 	void Start ()
 	{
 	    anim = GetComponentInChildren<Animator>();
 	    ups = new List<Vector3>();
 	    lastForward = transform.forward;
+	    Id = Int32.Parse(playerPostFix);
     }
 
     void Update()
