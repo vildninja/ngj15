@@ -17,6 +17,8 @@ public class MenuMain : MonoBehaviour
 
 	// Use this for initialization
 	void Start () {
+        if(Object.FindObjectOfType<LogoMenu>() != null)
+            backgroundMusic.Stop();
         //InAudio.PostEvent(GameManager.Instance.gameObject, startMusic);
 	}
 
