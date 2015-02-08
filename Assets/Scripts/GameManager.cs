@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("Dont try and give null controllers a score");
         }
-        var item = Score.Find(s => s.Item1 == controller);
+        var item = Score.Find(s => s.Item1.Id == controller.Id);
         if (item == null)
         {
             item = Score.Add(controller, score);
@@ -139,7 +139,7 @@ public class GameManager : MonoBehaviour
         var scoreUI = FindObjectOfType<PlayerScoreUI>();
         if (scoreUI)
         {
-            scoreUI.GivePoints(item.Item1, item.Item2);
+            scoreUI.GivePoints(controller, item.Item2);
         }
 
         if (item.Item2 > ScoreLimit && !WinnerFound)
