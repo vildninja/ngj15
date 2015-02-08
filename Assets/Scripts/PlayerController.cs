@@ -38,17 +38,27 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public Color color;
 
+    public Renderer playerColor;
+
     public Transform left, right;
+
+    public Slippers baseSlippers;
+
 	public int Id { get; private set; }
 	// Use this for initialization
-	void Start ()
+	IEnumerator Start ()
 	{
 	    anim = GetComponentInChildren<Animator>();
 	    ups = new List<Vector3>();
 	    lastForward = transform.forward;
 	    Id = Int32.Parse(playerPostFix);
 
-	    renderer.material.color = color;
+	    playerColor.material.color = color;
+
+	    var firstShoes = Instantiate(baseSlippers, transform.position, Quaternion.identity) as Slippers;
+	    firstShoes.collider.enabled = false;
+	    yield return null;
+        WearSlippers(firstShoes);
 	}
 
     void Update()
@@ -130,25 +140,32 @@ public class PlayerController : MonoBehaviour
         if (slip && col.enabled)
         {
             col.enabled = false;
-            if (slippers)
-            {
-                // trash old slippers
-                Destroy(slippers.left.gameObject);
-                Destroy(slippers.right.gameObject);
-                Destroy(slippers.gameObject);
-            }
-
-            slippers = slip;
-
-            // attatch new slippers;
-
-            slippers.left.SetParent(left, true);
-            slippers.left.localPosition = Vector3.zero;
-            slippers.left.localEulerAngles = Vector3.zero;
-            slippers.right.SetParent(right, true);
-            slippers.right.localPosition = Vector3.zero;
-            slippers.right.localEulerAngles = Vector3.zero;
+            WearSlippers(slip);
         }
+    }
+
+    void WearSlippers(Slippers slip)
+    {
+        if (slippers)
+        {
+            // trash old slippers
+            Destroy(slippers.left.gameObject);
+            Destroy(slippers.right.gameObject);
+            Destroy(slippers.gameObject);
+        }
+
+        slippers = slip;
+
+        // attatch new slippers;
+
+        slippers.left.SetParent(left, true);
+        slippers.left.localPosition = Vector3.zero;
+        slippers.left.localScale = Vector3.one;
+        slippers.left.localEulerAngles = Vector3.zero;
+        slippers.right.SetParent(right, true);
+        slippers.right.localPosition = Vector3.zero;
+        slippers.right.localScale = Vector3.one;
+        slippers.right.localEulerAngles = new Vector3(0, 180, 180);
     }
      
     void OnCollisionEnter(Collision col)

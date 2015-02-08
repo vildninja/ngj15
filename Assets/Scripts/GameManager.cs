@@ -7,6 +7,7 @@ using GameCore;
 using GameCore.Util;
 using UtilExtensions;
 using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class GameManager : MonoBehaviour
 
     public InAudioNode Point;
     public float startSpeed = 10;
+
+    public List<SpawnPoint> itemSpawns;
         
     public Color PlayerColor(int player)
     {
@@ -121,6 +124,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(PlayWin());
         }
     }
+
 
     IEnumerator PlayWin()
     {
