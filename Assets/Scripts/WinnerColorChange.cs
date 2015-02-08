@@ -8,6 +8,6 @@ public class WinnerColorChange : MonoBehaviour {
 	void Update ()
 	{
         Color color = GameManager.Instance.PlayerColor(GameManager.Instance.WinningPlayerId());
-	    GetComponent<Image>().color = color;
+	    renderer.material.color = color;
 	}
 }
