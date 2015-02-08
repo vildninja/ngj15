@@ -10,7 +10,7 @@ public class Killzone : MonoBehaviour
         var player = other.GetComponent<PlayerController>();
         if (player != null)
         {
-            InAudio.Play(gameObject, deathSound);
+            InAudio.PlayAtPosition(gameObject, deathSound, other.transform.position);
             Object.Destroy(other.gameObject);
             GameManager.Instance.Respawn(player);
         }

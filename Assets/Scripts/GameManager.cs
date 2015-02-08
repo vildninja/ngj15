@@ -247,9 +247,14 @@ public class GameManager : MonoBehaviour
 
     public void Respawn(PlayerController controller)
     {
-        int number = Int32.Parse(controller.playerPostFix);
-        Spawn(number, GetSpawnPoint(number).transform);
         Services.Get<CameraShake>().ApplyShake(0.6f, 0.6f);
+        int number = Int32.Parse(controller.playerPostFix);
+        StartCoroutine(DelayedRespawn(number));
+    }
 
+    IEnumerator DelayedRespawn(int number)
+    {
+        yield return new WaitForSeconds(1.5f);
+        Spawn(number, GetSpawnPoint(number).transform);
     }
 }
