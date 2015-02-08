@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     public Slippers slippers;
 
     public InAudioNode jumpSound;
+    public InAudioNode deathSound;
 
     public float Force { get { return force * (slippers ? slippers.forceMultiplier : 1); } }
     public float Jump { get { return jump * (slippers ? slippers.jumpMultiplier : 1); } }
@@ -219,7 +220,7 @@ public class PlayerController : MonoBehaviour
                     parts.renderer.material.color = other.color;
                 }
 
-                //InAudio.Play(gameObject, deathSound);
+                InAudio.PlayAtPosition(GameManager.Instance.gameObject, deathSound, other.gameObject.transform.position);
                 Destroy(other.gameObject);
                 GameManager.Instance.Respawn(other);
 

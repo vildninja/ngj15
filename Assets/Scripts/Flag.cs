@@ -12,8 +12,8 @@ public class Flag : MonoBehaviour
     public float lastCaptureTime;
 
     public float WaitTime = 2.5f;
-    public int Score = 3;
-    public int TotalScoreMax = 6;
+    public int Score = 1;
+    public int TotalScoreMax = 1;
     private int ExtraScore;
 
     void Start()
