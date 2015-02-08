@@ -1,13 +1,33 @@
 fileFormatVersion: 2
-guid: 48d943ac265a01143bb4854ffe383492
+guid: ec3b34053a6c7bf468b874c9c8f59814
 ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: pCylinder1
+    100000: polySurface1
+    100002: polySurface4
+    100004: polySurface5
+    100006: polySurface7
+    100008: polySurface7 1
+    100010: pSphere1
+    100012: //RootNode
+    100014: transform1
+    100016: transform2
+    100018: transform3
+    100020: transform4
+    400000: polySurface1
+    400002: polySurface4
+    400004: polySurface5
+    400006: polySurface7
+    400008: polySurface7 1
+    400010: pSphere1
+    400012: //RootNode
+    400014: transform1
+    400016: transform2
+    400018: transform3
+    400020: transform4
+    2300000: polySurface7
+    3300000: polySurface7
+    4300000: polySurface7
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -44,7 +64,7 @@ ModelImporter:
   tangentSpace:
     normalSmoothAngle: 60
     splitTangentsAcrossUV: 1
-    normalImportMode: 0
+    normalImportMode: 1
     tangentImportMode: 1
   importAnimation: 1
   copyAvatar: 0
