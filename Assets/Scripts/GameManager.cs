@@ -158,13 +158,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
+    private bool gameOver;
     IEnumerator PlayWin()
     {
+        gameOver = true;
         Services.Get<MusicPlayer>().GetComponent<AudioSource>().Stop();
         InAudio.PostEvent(gameObject, Winning);
         yield return new WaitForSeconds(4);
         Application.LoadLevel(Application.loadedLevel);
+        gameOver = false;
     }
         
     public TupleList<PlayerController, int> Score = new TupleList<PlayerController, int>();
@@ -247,6 +249,9 @@ public class GameManager : MonoBehaviour
 
     public void Respawn(PlayerController controller)
     {
+        if (gameOver)
+            return;
+
         Services.Get<CameraShake>().ApplyShake(0.6f, 0.6f);
         int number = Int32.Parse(controller.playerPostFix);
         StartCoroutine(DelayedRespawn(number));
