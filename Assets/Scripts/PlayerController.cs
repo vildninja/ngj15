@@ -44,6 +44,8 @@ public class PlayerController : MonoBehaviour
 
     public Slippers baseSlippers;
 
+    public Transform brokenBody;
+
 	public int Id { get; private set; }
 	// Use this for initialization
 	IEnumerator Start ()
@@ -156,6 +158,9 @@ public class PlayerController : MonoBehaviour
 
         slippers = slip;
 
+        if (slippers.audio)
+            slippers.audio.Play();
+
         // attatch new slippers;
 
         slippers.left.SetParent(left, true);
@@ -174,6 +179,19 @@ public class PlayerController : MonoBehaviour
         if (other)
         {
 //            Debug.Log("Impact " + playerPostFix);
+
+            if (slippers && slippers.name.Contains("Shark"))
+            {
+                other.collider.enabled = false;
+                var dead = Instantiate(brokenBody, other.transform.position, other.transform.rotation) as Transform;
+                foreach (var parts in dead.GetComponentsInChildren<Rigidbody>())
+                {
+                    parts.AddForce(-col.contacts[0].normal * col.relativeVelocity.magnitude, ForceMode.VelocityChange);
+                    parts.renderer.material.color = other.color;
+                }
+                Destroy(other.gameObject);
+                Services.Get<CameraShake>().ApplyShake(0.4f, 0.5f);
+            }
 
             var impact = Vector3.Project(col.relativeVelocity, col.contacts[0].normal);
             impact *= other.Push/Push;

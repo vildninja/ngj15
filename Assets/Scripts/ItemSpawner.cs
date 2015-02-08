@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UtilExtensions;
 
-public class ItemSpawner : MonoBehaviour {
+public class ItemSpawner : MonoBehaviour
+{
 
-
+    public AnimationCurve distribution;
     public List<Transform> spawnItems; 
 
 	// Use this for initialization
@@ -22,7 +23,7 @@ public class ItemSpawner : MonoBehaviour {
 
             if (spawned.Count(s => s && s.collider.enabled) < 2)
             {
-                int nextSpawn = Mathf.FloorToInt(Mathf.Sqrt(Random.Range(0, spawnItems.Count * spawnItems.Count)));
+                int nextSpawn = Mathf.FloorToInt(distribution.Evaluate(Random.value) * spawnItems.Count);
                 var item = spawnItems[nextSpawn];
                 spawnItems.RemoveAt(nextSpawn);
                 spawnItems.Add(item);
