@@ -8,7 +8,7 @@ public class LogoMenu : MonoBehaviour {
 
 	// Use this for initialization
 	IEnumerator Start () {
-        InAudio.Play(gameObject, MainMenuMusic);
+        //InAudio.Play(gameObject, MainMenuMusic);
         yield return new WaitForSeconds(WaitTime);
         Application.LoadLevel(1);
 
@@ -17,6 +17,10 @@ public class LogoMenu : MonoBehaviour {
 
     public void Stop()
     {
-        InAudio.Stop(gameObject, MainMenuMusic);
+        GetComponent<AudioSource>().Stop();
+        Object.Destroy(gameObject);
+        //InAudio.Stop(gameObject, MainMenuMusic);
     }
+
+
 } 
