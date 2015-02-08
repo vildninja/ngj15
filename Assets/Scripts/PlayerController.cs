@@ -187,6 +187,7 @@ public class PlayerController : MonoBehaviour
                 foreach (var parts in dead.GetComponentsInChildren<Rigidbody>())
                 {
                     parts.AddForce(-col.contacts[0].normal * col.relativeVelocity.magnitude, ForceMode.VelocityChange);
+                    parts.renderer.material.color = other.color;
                 }
                 Destroy(other.gameObject);
                 Services.Get<CameraShake>().ApplyShake(0.4f, 0.5f);
