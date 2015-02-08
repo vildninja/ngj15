@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
                 Spawn(count, Object.FindObjectsOfType<SpawnPoint>().Find(s => s.PlayerNoSpawn == count).transform);
             }
         }
-        if (Input.GetButtonDown("Back_All") && Application.loadedLevel == 2)
+        if (Input.GetButtonDown("Back_All") && Application.loadedLevel >= 2)
         {
             StopAllCoroutines();
             Application.LoadLevel(1);
@@ -165,7 +165,7 @@ public class GameManager : MonoBehaviour
         Services.Get<MusicPlayer>().GetComponent<AudioSource>().Stop();
         InAudio.PostEvent(gameObject, Winning);
         yield return new WaitForSeconds(4);
-        Application.LoadLevel(Application.loadedLevel);
+        Application.LoadLevel(Application.loadedLevel == 2 ? 3 : 2);
         gameOver = false;
     }
         
@@ -173,7 +173,7 @@ public class GameManager : MonoBehaviour
 
     void OnLevelWasLoaded(int level)
     {
-        if (level == 2)
+        if (level >= 2)
         {
             GameInput.AllowInput = false;
             StartCoroutine(PlayStartAnim());
