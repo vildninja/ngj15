@@ -7,6 +7,9 @@ public class MenuMain : MonoBehaviour
     public InAudioEvent startMusic;
     public InAudioEvent startGame;
 
+    public AudioSource backgroundMusic;
+    public AudioSource StartSound;
+
     void Awake()
     {
         Services.Override(typeof(MenuMain), this);
@@ -14,11 +17,13 @@ public class MenuMain : MonoBehaviour
 
 	// Use this for initialization
 	void Start () {
-        InAudio.PostEvent(GameManager.Instance.gameObject, startMusic);
+        //InAudio.PostEvent(GameManager.Instance.gameObject, startMusic);
 	}
 
     public void StartGame()
     {
-        InAudio.PostEvent(GameManager.Instance.gameObject, startGame);
+        backgroundMusic.Stop();
+        StartSound.Play();
+        //InAudio.PostEvent(GameManager.Instance.gameObject, startGame);
     }
 }
