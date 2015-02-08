@@ -184,7 +184,6 @@ namespace UtilExtensions
             if (list == null || func == null)
             {
                 throw new ArgumentNullException("Find list" + list+ " "+func);
-                return default(T);
             }
             for (int i = 0; i < list.Count; i++)
             {
