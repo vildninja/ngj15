@@ -12,7 +12,7 @@ using Random = UnityEngine.Random;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public List<int> ActivePlayers;
+    //public List<int> ActivePlayers;
     public GameObject PlayerPrefab;
 
     [SerializeField] private List<Color> PlayerColors;
@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
 
     public int ScoreLimit = 20;
 
+    public InAudioEvent Winning;
     public InAudioNode Point;
     public float startSpeed = 10;
 
@@ -47,10 +48,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public PlayerController Winner = null;
+    private bool WinnerFound;
+    private Color WinnerColor;
 
 	// Use this for initialization
-	void Start ()
+	void Awake ()
 	{
 	    if (Instance == null)
 	    {
@@ -63,24 +65,16 @@ public class GameManager : MonoBehaviour
 
     private PlayerReady[] readyPlayers;
     private SpawnPoint[] SpawnPoints;
-    void Update()
+    void Update() 
     {
         if (Input.GetButtonDown("Start"))
         {
-            if (Application.loadedLevel == 0)
+            if (Application.loadedLevel == 1)
             {
                 readyPlayers = Object.FindObjectsOfType<PlayerReady>();
                 if (readyPlayers.Count(r => r.Active) > 0)
-                {
-                    for (int i = 0; i < readyPlayers.Length; i++)
-                    {
-                        if (readyPlayers[i].Active)
-                        {
-                            ActivePlayers.Add(readyPlayers[i].PlayerID);
-                        }
-                    }
-                    Application.LoadLevel("scene");
-                }
+                    StartCoroutine(StartGame());
+
             }
             else
             {
@@ -88,6 +82,36 @@ public class GameManager : MonoBehaviour
                 Spawn(count, Object.FindObjectsOfType<SpawnPoint>().Find(s => s.PlayerNoSpawn == count).transform);
             }
         }
+        if (Input.GetButtonDown("Back_All") && Application.loadedLevel == 2)
+        {
+            StopAllCoroutines();
+            Application.LoadLevel(1);
+        }
+    }
+
+    IEnumerator StartGame()
+    {
+        Services.Get<MenuMain>().StartGame();
+        var logo = Services.Get<LogoMenu>();
+        if(logo != null)
+            logo.Stop();
+        yield return new WaitForSeconds(1.8f);
+        //if(readyPlayers == null || readyPlayers.Length == 0)
+        //    readyPlayers = Object.FindObjectsOfType<PlayerReady>();
+        
+        //Debug.Log(readyPlayers.Count(p => p.Active));
+        //for (int i = 0; i < readyPlayers.Length; i++)
+        //{
+        //    if (readyPlayers[i].Active)
+        //    {
+        //        ActivePlayers.Add(readyPlayers[i].PlayerID);
+        //    }
+        //}
+
+        InAudio.StopAll(gameObject);
+        Application.LoadLevel(2);
+        
+        
     }
 
     public void GivePlayerScore(PlayerController controller, int score)
@@ -109,11 +133,11 @@ public class GameManager : MonoBehaviour
             item.Item2 += score;
         }
 
-
-
-        if (item.Item2 > ScoreLimit && Winner == null)
+        if (item.Item2 > ScoreLimit && !WinnerFound)
         {
-            Winner = controller;
+            WinnerFound = true;
+            InAudio.StopAll();
+            //WinnerColor = PlayerColor(controller.Id);
             var hook = Services.Get<WinnerHook>().gameObject;
             hook.SetActive(true);
             for (int i = 0; i < hook.transform.childCount; i++)
@@ -128,44 +152,78 @@ public class GameManager : MonoBehaviour
 
     IEnumerator PlayWin()
     {
+        Services.Get<MusicPlayer>().GetComponent<AudioSource>().Stop();
+        InAudio.PostEvent(gameObject, Winning);
         yield return new WaitForSeconds(4);
-        Application.LoadLevel(0);
+        Application.LoadLevel(Application.loadedLevel);
     }
         
     public TupleList<PlayerController, int> Score = new TupleList<PlayerController, int>();
 
     void OnLevelWasLoaded(int level)
     {
-        if (level == 1)
+        if (level == 2)
         {
+            GameInput.AllowInput = false;
+            StartCoroutine(PlayStartAnim());
+
             Score.Clear();
             Players.Clear();
-            Winner = null;
+            WinnerFound = false;
 
-            if (readyPlayers != null)
+            StartCoroutine(SpawnPlayers());
+        }
+    }
+
+    private IEnumerator SpawnPlayers()
+    {
+        yield return new WaitForSeconds(1.6f);
+        if (readyPlayers != null)
+        {
+            for (int i = 0; i < readyPlayers.Length; i++)
             {
-                for (int i = 0; i < readyPlayers.Length; i++)
+                if (!readyPlayers[i].Active)
+                    continue;
+
+                int playerId = readyPlayers[i].PlayerID;
+                var spawn = GetSpawnPoint(playerId);
+                if (spawn != null)
                 {
-                    if(!readyPlayers[i].Active)
-                        continue;
-                    var spawn = GetSpawnPoint(readyPlayers[i].PlayerID);
-                    Spawn(readyPlayers[i].PlayerID, spawn.transform);
+                    Spawn(playerId, spawn.transform);
                 }
+                else
+                {
+                    Debug.LogError("Could not fint spawn for player id " + playerId);
+                }
+            }
 
 
-                foreach (var playerController in Players)
-                {
-                    Score.Add(playerController, 0);
-                }
+            foreach (var playerController in Players)
+            {
+                Score.Add(playerController, 0);
             }
         }
     }
 
+    private IEnumerator PlayStartAnim()
+    {
+        for (int i = 3 - 1; i >= 0; i--)
+        {
+            yield return new WaitForSeconds(0.6f);
+        }
+        GameInput.AllowInput = true;
+    }
+
     private SpawnPoint GetSpawnPoint(int playerId)
     {
-        if(SpawnPoints == null)
+        if(SpawnPoints == null || SpawnPoints[0] == null)
             SpawnPoints = Object.FindObjectsOfType<SpawnPoint>();
-        return SpawnPoints.Find(s => s.PlayerNoSpawn == playerId);
+        foreach (var spawnPoint in SpawnPoints)
+        {
+            if(spawnPoint.PlayerNoSpawn == playerId)
+                return spawnPoint;
+        }
+        return null;
     }
 
     void Spawn(int player, Transform spawn)

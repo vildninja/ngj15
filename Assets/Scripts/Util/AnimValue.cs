@@ -21,10 +21,8 @@ public class AnimValue
     [SerializeField]
     public float Max;
 
-#if UNITY_EDITOR
     [SerializeField]
     private string name;
-#endif
 
 
     public AnimValue(string name)

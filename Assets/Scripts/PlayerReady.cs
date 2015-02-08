@@ -8,18 +8,29 @@ public class PlayerReady : MonoBehaviour
     public bool Active = false;
     public int PlayerID = 1;
 
+    public GameObject EnableIfReady;
+    public GameObject EnableIfNotReady;
+
+    
+
 	// Update is called once per frame
 	void Update ()
 	{
         if (Input.GetKeyDown(Key))
 	    {
 	        Active = !Active;
-            if(Active)
-                GetComponent<Image>().color = Color.green;
-            else
-            {
-                GetComponent<Image>().color = Color.white;    
-            }
+            
+	    }
+
+	    if (Active)
+	    {
+	        EnableIfReady.SetActive(true);
+            EnableIfNotReady.SetActive(false);
+	    }
+	    else
+	    {
+            EnableIfReady.SetActive(false);
+            EnableIfNotReady.SetActive(true);
 	    }
 	}
 }

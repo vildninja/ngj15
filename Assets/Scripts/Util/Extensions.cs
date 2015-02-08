@@ -182,7 +182,10 @@ namespace UtilExtensions
         public static T Find<T>(this IList<T> list, Func<T, bool> func)
         {
             if (list == null || func == null)
+            {
+                throw new ArgumentNullException("Find list" + list+ " "+func);
                 return default(T);
+            }
             for (int i = 0; i < list.Count; i++)
             {
                 if (func(list[i]))
