@@ -10,7 +10,7 @@ public class PlayerReady : MonoBehaviour
 
     public GameObject EnableIfReady;
     public GameObject EnableIfNotReady;
-
+    public GameObject StartInfo;
     
 
 	// Update is called once per frame
@@ -26,6 +26,7 @@ public class PlayerReady : MonoBehaviour
 	    {
 	        EnableIfReady.SetActive(true);
             EnableIfNotReady.SetActive(false);
+            StartInfo.SetActive(true);
 	    }
 	    else
 	    {
