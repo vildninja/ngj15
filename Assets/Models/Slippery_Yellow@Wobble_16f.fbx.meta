@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: def0dbe7f57900549891aa4f49e06307
+guid: 7744b3d1f042c514684874f9135d87c8
 ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
@@ -49,13 +49,9 @@ ModelImporter:
     400040: Toes.L
     400042: Toes.L1
     400044: transform2
-    2300000: Cube
-    3300000: Cube
     4300000: Cube
-    7400000: Run
-    7400002: Idle
+    7400000: Wobble_16f
     9500000: //RootNode
-    11100000: //RootNode
     13700000: Cube
   materials:
     importMaterials: 1
@@ -66,7 +62,7 @@ ModelImporter:
     bakeSimulation: 0
     optimizeGameObjects: 0
     motionNodeName: 
-    animationCompression: 3
+    animationCompression: 1
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
@@ -74,17 +70,17 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: Run
+      name: Wobble_16f
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 8
+      lastFrame: 15
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       loopTime: 1
-      loopBlend: 1
+      loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
@@ -95,21 +91,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: .171119019
-        functionName: Foot
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: .6638726
-        functionName: Foot
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask:
       - path: 
         weight: 1

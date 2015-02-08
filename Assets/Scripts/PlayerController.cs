@@ -48,6 +48,8 @@ public class PlayerController : MonoBehaviour
 
     public Transform brokenBody;
 
+    public float wobbleShift = 5;
+
 	public int Id { get; private set; }
 	// Use this for initialization
 	IEnumerator Start ()
@@ -58,6 +60,12 @@ public class PlayerController : MonoBehaviour
 	    Id = Int32.Parse(playerPostFix);
 
 	    playerColor.material.color = color;
+
+        var scoreUI = FindObjectOfType<PlayerScoreUI>();
+        if (scoreUI)
+        {
+            scoreUI.Register(this);
+        }
 
 	    var firstShoes = Instantiate(baseSlippers, transform.position, Quaternion.identity) as Slippers;
 	    firstShoes.collider.enabled = false;
@@ -118,16 +126,23 @@ public class PlayerController : MonoBehaviour
 	        direction += direction*(a/180)*Turn;
 	    }
 
+
+        //Debug.Log(rigidbody.velocity.magnitude);
 	    if (direction.sqrMagnitude > 0.2f)
 	    {
             anim.Play("Run");
             anim.speed = Mathf.Clamp01(direction.magnitude) * AnimSpeed;
-	    }
-	    else
-	    {
-            anim.Play("Idle");
+        }
+        else if (rigidbody.velocity.magnitude > wobbleShift)
+        {
+            anim.Play("WobbleWobble");
             anim.speed = 1;
-	    }
+        }
+        else
+        {
+            anim.Play("Wobble");
+            anim.speed = 1;
+        }
 
         rigidbody.AddForce(direction * Force * (isGrounded ? 1 : Air));
 
@@ -179,6 +194,12 @@ public class PlayerController : MonoBehaviour
         slippers.right.localPosition = Vector3.zero;
         slippers.right.localScale = Vector3.one;
         slippers.right.localEulerAngles = new Vector3(0, 180, 180);
+
+        var scoreUI = FindObjectOfType<PlayerScoreUI>();
+        if (scoreUI)
+        {
+            scoreUI.SetSlipper(Id, slippers.left);
+        }
     }
      
     void OnCollisionEnter(Collision col)
@@ -197,7 +218,11 @@ public class PlayerController : MonoBehaviour
                     parts.AddForce(-col.contacts[0].normal * col.relativeVelocity.magnitude, ForceMode.VelocityChange);
                     parts.renderer.material.color = other.color;
                 }
+
+                //InAudio.Play(gameObject, deathSound);
                 Destroy(other.gameObject);
+                GameManager.Instance.Respawn(other);
+
                 Services.Get<CameraShake>().ApplyShake(0.4f, 0.5f);
             }
 

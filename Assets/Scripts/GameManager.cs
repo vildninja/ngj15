@@ -116,6 +116,9 @@ public class GameManager : MonoBehaviour
 
     public void GivePlayerScore(PlayerController controller, int score)
     {
+
+        Services.Get<CameraShake>().ApplyShake(0.2f, 0.2f);
+
         if (controller == null)
         {
             Debug.LogError("Dont try and give null controllers a score");
@@ -131,6 +134,12 @@ public class GameManager : MonoBehaviour
             if (item.Item2 < ScoreLimit)
                 InAudio.Play(gameObject, Point);
             item.Item2 += score;
+        }
+
+        var scoreUI = FindObjectOfType<PlayerScoreUI>();
+        if (scoreUI)
+        {
+            scoreUI.GivePoints(item.Item1, item.Item2);
         }
 
         if (item.Item2 > ScoreLimit && !WinnerFound)
