@@ -9,6 +9,7 @@ public class GroundCreator : MonoBehaviour {
 
     public bool updateMesh;
     public bool export;
+    public bool exportNew;
 
 	// Use this for initialization
 	void Start () {
@@ -23,13 +24,13 @@ public class GroundCreator : MonoBehaviour {
             UpdateMesh();
             updateMesh = false;
         }
-//#if UNITY_EDITOR
-//        if (export)
-//        {
-//            export = false;
-//            UnityEditor.AssetDatabase.CreateAsset(GetComponent<MeshFilter>().mesh, "Assets/" + name + ".asset");
-//        }
-//#endif
+#if UNITY_EDITOR
+        if (exportNew)
+        {
+            exportNew = false;
+            UnityEditor.AssetDatabase.CreateAsset(GetComponent<MeshFilter>().mesh, "Assets/" + name + ".asset");
+        }
+#endif
     }
 
     public void UpdateMesh()
