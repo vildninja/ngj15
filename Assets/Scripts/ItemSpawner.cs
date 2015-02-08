@@ -21,7 +21,7 @@ public class ItemSpawner : MonoBehaviour
         {
             yield return new WaitForSeconds(Random.Range(2, 6));
 
-            if (spawned.Count(s => s && s.collider.enabled) < 2)
+            if (spawned.Count(s => s && s.collider.enabled) < 4)
             {
                 int nextSpawn = Mathf.FloorToInt(distribution.Evaluate(Random.value) * spawnItems.Count);
                 var item = spawnItems[nextSpawn];
