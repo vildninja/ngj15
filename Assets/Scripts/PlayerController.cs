@@ -68,6 +68,9 @@ public class PlayerController : MonoBehaviour
             scoreUI.Register(this);
         }
 
+	    var trails = GetComponent<TrailRenderer>();
+	    trails.material.color = color;
+
 	    var firstShoes = Instantiate(baseSlippers, transform.position, Quaternion.identity) as Slippers;
 	    firstShoes.collider.enabled = false;
 	    yield return null;
