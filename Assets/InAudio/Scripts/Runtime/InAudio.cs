@@ -272,6 +272,15 @@ public class InAudio : MonoBehaviour
     }
 
     /// <summary>
+    /// Stop all sounds playing on this game object
+    /// </summary>
+    /// <param name="gameObject"></param>
+    public static void StopAll()
+    {
+        instance._inAudioEventWorker.StopAll(0, LeanTweenType.notUsed);
+    }
+
+    /// <summary>
     /// Stop all sounds playing on this game object with fade out time
     /// </summary>
     /// <param name="gameObject"></param>

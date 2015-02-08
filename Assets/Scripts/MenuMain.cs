@@ -14,11 +14,11 @@ public class MenuMain : MonoBehaviour
 
 	// Use this for initialization
 	void Start () {
-	    InAudio.PostEvent(gameObject, startMusic);
+        InAudio.PostEvent(GameManager.Instance.gameObject, startMusic);
 	}
 
     public void StartGame()
     {
-        InAudio.PostEvent(gameObject, startGame);
+        InAudio.PostEvent(GameManager.Instance.gameObject, startGame);
     }
 }

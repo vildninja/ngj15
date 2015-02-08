@@ -38,6 +38,27 @@ public class InAudioEventWorker : MonoBehaviour
         return poolObject;
     }
 
+    public void StopAll(float fadeOutTime, LeanTweenType type)
+    {
+        foreach (var pair in GOAudioNodes)
+        {
+            var infoList = pair.Value;
+            if (infoList != null)
+            {
+                var list = infoList.InfoList;
+                for (int i = 0; i < list.Count; ++i)
+                {
+                    if (fadeOutTime > 0)
+                        list[i].Player.Stop(fadeOutTime, type);
+                    else
+                        list[i].Player.Stop();
+                }
+            }
+        }
+
+        
+    }
+
     public void StopAll(GameObject controllingObject, float fadeOutTime, LeanTweenType type)
     {
         ObjectAudioList infoList;

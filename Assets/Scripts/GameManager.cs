@@ -12,7 +12,7 @@ using Random = UnityEngine.Random;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public List<int> ActivePlayers;
+    //public List<int> ActivePlayers;
     public GameObject PlayerPrefab;
 
     [SerializeField] private List<Color> PlayerColors;
@@ -92,17 +92,25 @@ public class GameManager : MonoBehaviour
     IEnumerator StartGame()
     {
         Services.Get<MenuMain>().StartGame();
+        var logo = Services.Get<LogoMenu>();
+        if(logo != null)
+            logo.Stop();
         yield return new WaitForSeconds(1.8f);
-        readyPlayers = Object.FindObjectsOfType<PlayerReady>();
+        //if(readyPlayers == null || readyPlayers.Length == 0)
+        //    readyPlayers = Object.FindObjectsOfType<PlayerReady>();
         
-        for (int i = 0; i < readyPlayers.Length; i++)
-        {
-            if (readyPlayers[i].Active)
-            {
-                ActivePlayers.Add(readyPlayers[i].PlayerID);
-            }
-        }
+        //Debug.Log(readyPlayers.Count(p => p.Active));
+        //for (int i = 0; i < readyPlayers.Length; i++)
+        //{
+        //    if (readyPlayers[i].Active)
+        //    {
+        //        ActivePlayers.Add(readyPlayers[i].PlayerID);
+        //    }
+        //}
+
+        InAudio.StopAll(gameObject);
         Application.LoadLevel(2);
+        
         
     }
 
@@ -128,6 +136,7 @@ public class GameManager : MonoBehaviour
         if (item.Item2 > ScoreLimit && !WinnerFound)
         {
             WinnerFound = true;
+            InAudio.StopAll();
             //WinnerColor = PlayerColor(controller.Id);
             var hook = Services.Get<WinnerHook>().gameObject;
             hook.SetActive(true);
@@ -145,6 +154,7 @@ public class GameManager : MonoBehaviour
     {
         InAudio.PostEvent(gameObject, Winning);
         yield return new WaitForSeconds(4);
+        InAudio.StopAll();
         Application.LoadLevel(Application.loadedLevel);
     }
         
@@ -152,7 +162,7 @@ public class GameManager : MonoBehaviour
 
     void OnLevelWasLoaded(int level)
     {
-        if (level == 1)
+        if (level == 2)
         {
             GameInput.AllowInput = false;
             StartCoroutine(PlayStartAnim());
@@ -177,8 +187,14 @@ public class GameManager : MonoBehaviour
 
                 int playerId = readyPlayers[i].PlayerID;
                 var spawn = GetSpawnPoint(playerId);
-                if(spawn != null)
+                if (spawn != null)
+                {
                     Spawn(playerId, spawn.transform);
+                }
+                else
+                {
+                    Debug.LogError("Could not fint spawn for player id " + playerId);
+                }
             }
 
 
@@ -200,9 +216,14 @@ public class GameManager : MonoBehaviour
 
     private SpawnPoint GetSpawnPoint(int playerId)
     {
-        if(SpawnPoints == null)
+        if(SpawnPoints == null || SpawnPoints[0] == null)
             SpawnPoints = Object.FindObjectsOfType<SpawnPoint>();
-        return SpawnPoints.Find(s => s.PlayerNoSpawn == playerId);
+        foreach (var spawnPoint in SpawnPoints)
+        {
+            if(spawnPoint.PlayerNoSpawn == playerId)
+                return spawnPoint;
+        }
+        return null;
     }
 
     void Spawn(int player, Transform spawn)
