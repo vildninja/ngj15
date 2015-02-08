@@ -123,7 +123,8 @@ public class InPlayer : MonoBehaviour
     public void Stop()
     {
         //Use a non zero amount to avoid any issues with sound glitching
-        StartCoroutine(StopAndMute(0.08f, LeanTweenType.notUsed));
+        if(this != null)
+            StartCoroutine(StopAndMute(0.08f, LeanTweenType.notUsed));
     }
 
     /// <summary>
