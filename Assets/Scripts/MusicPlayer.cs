@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using GameCore;
 using System.Collections;
 
 public class MusicPlayer : MonoBehaviour {
@@ -6,7 +7,14 @@ public class MusicPlayer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        InAudio.PostEvent(GameManager.Instance.gameObject, gameMusicEvent);
+        Services.Override(GetType(), this);
+        //InAudio.PostEvent(gameObject, gameMusicEvent);
 	}
+
+    void OnDisable()
+    {
+        //InAudio.StopAll(gameObject);
+        GetComponent<AudioSource>().Stop();
+    }
 
 }

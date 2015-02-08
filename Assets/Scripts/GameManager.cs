@@ -152,9 +152,9 @@ public class GameManager : MonoBehaviour
 
     IEnumerator PlayWin()
     {
+        Services.Get<MusicPlayer>().GetComponent<AudioSource>().Stop();
         InAudio.PostEvent(gameObject, Winning);
         yield return new WaitForSeconds(4);
-        InAudio.StopAll();
         Application.LoadLevel(Application.loadedLevel);
     }
         
