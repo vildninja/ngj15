@@ -8,18 +8,19 @@ using System.Collections;
 public class GroundCreator : MonoBehaviour {
 
     public bool updateMesh;
+    public bool allwaysUpdateMesh;
     public bool export;
     public bool exportNew;
 
 	// Use this for initialization
 	void Start () {
-
-        
+        if (Application.isPlaying)
+            Destroy(gameObject);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (updateMesh)
+        if (updateMesh || allwaysUpdateMesh)
         {
             UpdateMesh();
             updateMesh = false;
